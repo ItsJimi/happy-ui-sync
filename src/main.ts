@@ -14,6 +14,7 @@ const getUserInfo = async () => {
   const {
     name,
     email,
+    token,
     repository,
     colorsFilepath,
     branchRef,
@@ -22,6 +23,7 @@ const getUserInfo = async () => {
     type: "REHYDRATE_INFO",
     name,
     email,
+    token,
     repository,
     colorsFilepath,
     branchRef,
@@ -37,10 +39,11 @@ figma.ui.onmessage = (msg) => {
   // One way of distinguishing between different types of messages sent from
   // your HTML page is to use an object with a "type" property like this.
   if (msg.type === "SAVE_INFO") {
-    const { userName, userEmail, repository, colorsFilepath, branchRef } = msg;
+    const { userName, userEmail, token, repository, colorsFilepath, branchRef } = msg;
     figma.clientStorage.setAsync("USER_INFO", {
       name: userName,
       email: userEmail,
+      token,
       repository,
       colorsFilepath,
       branchRef,

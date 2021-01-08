@@ -70,8 +70,10 @@ class App extends React.Component<{}, StateProps> {
     >);
   };
 
-  sendStyleChanges = (event) => {
-    event.preventDefault();
+  sendStyleChanges = (event?: React.FormEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
     // Save info to figma storage
     parent.postMessage(
       {
@@ -79,6 +81,7 @@ class App extends React.Component<{}, StateProps> {
           type: "SAVE_INFO",
           userName: this.state.userName,
           userEmail: this.state.userEmail,
+          token: this.state.token,
           repository: this.state.repository,
           colorsFilepath: this.state.colorsFilepath,
           branchRef: this.state.branchRef,
@@ -136,6 +139,9 @@ class App extends React.Component<{}, StateProps> {
           if (pluginMessage.email) {
             this.setState({ userEmail: pluginMessage.email });
           }
+          if (pluginMessage.token) {
+            this.setState({ token: pluginMessage.token });
+          }
           if (pluginMessage.repository) {
             this.setState({ repository: pluginMessage.repository });
           }
@@ -144,6 +150,11 @@ class App extends React.Component<{}, StateProps> {
           }
           if (pluginMessage.branchRef) {
             this.setState({ branchRef: pluginMessage.branchRef });
+          }
+
+          // Auto validate step if all inputs are filled
+          if (this.state.userName !== "" && this.state.userEmail !== "" && this.state.token !== "" && this.state.repository !== "" && this.state.colorsFilepath !== "" && this.state.branchRef !== "") {
+            this.sendStyleChanges()
           }
           break;
         case "NEW_COLORS":
